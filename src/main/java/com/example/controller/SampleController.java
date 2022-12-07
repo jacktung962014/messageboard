@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.Id;
@@ -17,9 +18,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.dao.CommentDao;
 import com.example.model.AccountModel;
 import com.example.model.MessageModel;
 import com.example.model.MessageboardModel;
+import com.example.model.Entity.ArticleList;
+import com.example.model.Entity.Comment;
 import com.example.service.AccountService;
 import com.example.service.MessageService;
 import com.example.service.SearchMessageboardService;
@@ -37,12 +41,12 @@ public class SampleController {
 	@GetMapping(value = "/")
 	// @ResponseBody
 	public String search(Model model) {
-		model.addAttribute("name", searchMessageboardService.getMessageboard());
+		model.addAttribute("article", searchMessageboardService.getArticleList());
 		return "index";
 	}
 
 	// 跳轉至登入頁
-	@GetMapping(value = "/login")
+	@GetMapping()
 	public String loginPage() {
 		return "login";
 	}
@@ -56,9 +60,14 @@ public class SampleController {
 
 	@GetMapping(value = "/postmodel")
 	public String postmodel(@RequestParam(value = "id", required = true) Integer id , Model model) {
-		MessageboardModel MessageboardId = searchMessageboardService.getMessageboardById(id);
+		MessageboardModel MessageboardId = searchMessageboardService.getMessageboardById(id);	
 		 model.addAttribute("id", MessageboardId);
 		 model.addAttribute("accountservice", accountService.getAccountById(MessageboardId.getUserID()));
+		 model.addAttribute("comment", messageService.getComments(id));
+		 
+		 
+		 
+		 
 		    return "postmodel";
 	}
 	
@@ -103,7 +112,7 @@ public class SampleController {
 	@ResponseBody
 	public String find(Integer findById) {
 		findById = 4;
-		Date j = accountService.getAccountById(findById).getcreateTime();
+		List<Comment> j = messageService.getComments(findById);
 		return j.toString();
 
 	}

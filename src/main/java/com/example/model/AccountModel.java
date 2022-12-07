@@ -23,53 +23,43 @@ public class AccountModel {
 	private Date createTime;
 	@Column(name = "permission")
 	private Integer permission;
-
 	public Integer getId() {
 		return id;
 	}
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-	public String getusername() {
+	public String getUsername() {
 		return username;
 	}
-
-	public void setusername(String username) {
+	public void setUsername(String username) {
 		this.username = username;
 	}
-
-	public String getaccount() {
+	public String getAccount() {
 		return account;
 	}
-
-	public void setaccount(String account) {
+	public void setAccount(String account) {
 		this.account = account;
 	}
-
-	public String getpassword() {
+	public String getPassword() {
 		return password;
 	}
-
-	public void setpassword(String password) {
+	public void setPassword(String password) {
 		this.password = password;
 	}
-
-	public Date getcreateTime() {
+	public Date getCreateTime() {
 		return createTime;
 	}
-
-	public void setcreateTime(Date createTime) {
+	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
-
 	public Integer getPermission() {
 		return permission;
 	}
-
 	public void setPermission(Integer permission) {
 		this.permission = permission;
 	}
+
+	
 
 }

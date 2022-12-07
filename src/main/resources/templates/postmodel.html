@@ -2,155 +2,153 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Dashboard - SB Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
-    <link href="css/styles.css" rel="stylesheet" />
-    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>Dashboard - SB Admin</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
+	rel="stylesheet" />
+<link href="css/styles.css" rel="stylesheet" />
+<script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"
+	crossorigin="anonymous"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 <body class="sb-nav-fixed sb-sidenav-toggled">
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="/">留言板首頁</a>
-        <!-- Navbar Search-->
-        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-            <div class="input-group">
-                <input class="form-control" type="text" placeholder="搜尋貼文" aria-label="Search for..."
-                    aria-describedby="btnNavbarSearch" />
-                <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i
-                        class="fas fa-search"></i></button>
-            </div>
-        </form>
-        <!-- Navbar-->
-        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
-                    aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="/login">登入</a></li>
-                    <li><a class="dropdown-item" href="/register">新增帳號</a></li>
-                    <li><a class="dropdown-item" href="/password">忘記密碼</a></li>
-                    <li><a class="dropdown-item" href="/postmessage">發布貼文</a></li>
-                    <li>
-                        <hr class="dropdown-divider" />
-                    </li>
-                    <li><a class="dropdown-item" href="#!">登出</a></li>
-                </ul>
-            </li>
-        </ul>
-    </nav>
+	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+		<!-- Navbar Brand-->
+		<a class="navbar-brand ps-3" href="/">留言板首頁</a>
+		<!-- Navbar Search-->
+		<form
+			class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+			<div class="input-group">
+				<input class="form-control" type="text" placeholder="搜尋貼文"
+					aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+				<button class="btn btn-primary" id="btnNavbarSearch" type="button">
+					<i class="fas fa-search"></i>
+				</button>
+			</div>
+		</form>
+		<!-- Navbar-->
+		<ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+			<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle" id="navbarDropdown" href="#"
+				role="button" data-bs-toggle="dropdown" aria-expanded="false"><i
+					class="fas fa-user fa-fw"></i></a>
+				<ul class="dropdown-menu dropdown-menu-end"
+					aria-labelledby="navbarDropdown">
+					<li><a class="dropdown-item" href="/login">登入</a></li>
+					<li><a class="dropdown-item" href="/register">新增帳號</a></li>
+					<li><a class="dropdown-item" href="/password">忘記密碼</a></li>
+					<li><a class="dropdown-item" href="/postmessage">發布貼文</a></li>
+					<li>
+						<hr class="dropdown-divider" />
+					</li>
+					<li><a class="dropdown-item" href="#!">登出</a></li>
+				</ul></li>
+		</ul>
+	</nav>
 
-    <div id="layoutSidenav">
-        <div id="layoutSidenav_content">
-            <div class="container col-md-10">
-                <div id="layoutSidenav_nav">
-                    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-                        <div class="sb-sidenav-menu"></div>
-                    </nav>
-                </div>
-                <div class="container-fluid px-4">
-                    <h3 class="mt-4" id="index_topic">留言板</h3>
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <p>
-                            <h4 th:text="${id.topic}" ></h4>
-                            </p>
-                            <div th:text="'作者 : ' + ${accountservice.password}" class="col-md-6" style="font-size: 16px; font-weight: bold;"></div>
-                            <div th:text="'發布時間 : ' + ${id.createTime}" class="col-md-6" style="font-size:16px; font-weight: bold;"></div>
-                            <hr size="4px">
-                            <font size="1">
-                                <p th:text="${id.memberText}"></p>
-                            </font>
-                            <hr size="4px">
+	<div id="layoutSidenav">
+		<div id="layoutSidenav_content">
+			<div class="container col-md-10">
+				<div id="layoutSidenav_nav">
+					<nav class="sb-sidenav accordion sb-sidenav-dark"
+						id="sidenavAccordion">
+						<div class="sb-sidenav-menu"></div>
+					</nav>
+				</div>
+				<div class="container-fluid px-4">
+					<h3 class="mt-4" id="index_topic">留言板</h3>
+					<div class="card mb-4">
+						<div class="card-body">
+							<p>
+							<h4 th:text="${id.topic}"></h4>
+							</p>
+							<div th:text="'作者 : ' + ${accountservice.username}"
+								class="col-md-6" style="font-size: 16px; font-weight: bold;"></div>
+							<div th:text="'發布時間 : ' + ${id.createTime}" class="col-md-6"
+								style="font-size: 16px; font-weight: bold;"></div>
+							<hr size="4px">
+							<font size="1">
+								<p th:text="${id.memberText}"></p>
+							</font>
+							<hr size="4px">
 
-                            <details>
-                                <summary style="font-size: 30px;">留言</summary>
-
-                                <p>
-                                <div class="row">
-                                    <div class="col-6" style="font-size: 18px; color: #0390fc;">golden12strongs</div>
-                                    <div class="col-6" style="text-align: right; font-size: 10px;">1F 2022/11/30
-                                        09:04:11</div>
-                                </div>
-                                <div style="font-size: 20px;">好文推推，看起來挺不錯的，台灣似乎沒有類似的廠商，無框畫比較多。</div>
-
-                                <div class="row">
-                                    <div class="col-6" style="font-size: 18px; color: #0390fc;">assholeparty996</div>
-                                    <div class="col-6" style="text-align: right; font-size: 10px;">2F 2022/11/30
-                                        10:34:47</div>
-                                </div>
-                                <div style="font-size: 20px;">
-                                    印刷品質挺精良的，本體是薄鐵片+磁鐵貼牆固定，梗圖、動漫電影類海報十分齊全，像萬聖節、黑五、聖誕節等特價時含運費一張台幣1500有找，蠻常辦30%off的特價的。
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-6" style="font-size: 18px; color: #0390fc;">deepdarkfantasy999</div>
-                                    <div class="col-6" style="text-align: right; font-size: 10px;">3F 2022/11/30
-                                        10:57:02</div>
-                                </div>
-                                <div style="font-size: 20px;">種類是很多啦，但是希望可以客製自己喜歡的圖。</div>
-                                </p>
-                                <div class="input-group sm-6">
-                                    <input type="text" class="form-control" placeholder="請輸入留言......"
-                                        aria-label="Recipient's username" aria-describedby="basic-addon2" maxlength="70"
-                                        minlength="4">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-primary" id="sendmessage">發布</button>
-                                        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-                                            <div id="liveToast"
-                                                class="toast align-items-center text-white bg-primary border-0"
-                                                role="alert" aria-live="assertive" aria-atomic="true">
-                                                <div class="toast-body">
-                                                    留言發布成功!
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </details>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <footer class="py-4 bg-light mt-auto">
-                <div class="container-fluid px-4">
-                    <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Your Website 2022</div>
-                        <div>
-                            <a href="#">Privacy Policy</a>
-                            &middot;
-                            <a href="#">Terms &amp; Conditions</a>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-        </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        crossorigin="anonymous"></script>
-    <script src="js/scripts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="assets/demo/chart-area-demo.js"></script>
-    <script src="assets/demo/chart-bar-demo.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
-    <script src="js/datatables-simple-demo.js"></script>
-    <script>
-        var toastTrigger = document.getElementById('sendmessage')
-        var toastLiveExample = document.getElementById('liveToast')
-        if (toastTrigger) {
-            toastTrigger.addEventListener('click', function () {
-                var toast = new bootstrap.Toast(toastLiveExample)
-                toast.show();
-                setTimeout("location.href='/postmodel'", 1500);
-            })
-        }
-    </script>
+							<details>
+								<summary style="font-size: 30px;">留言</summary>
+								<div th:each="usercomment:${comment}">
+									<div class="row">
+										<div th:text="${usercomment.username}" class="col-6"
+											style="font-size: 18px; color: #0390fc;"></div>
+										<div th:text="${usercomment.createTime}" class="col-6"
+											style="text-align: right; font-size: 10px;"></div>
+									</div>
+									<div th:text="${usercomment.memberMessage}"
+										style="font-size: 20px;"></div>
+								</div>
+								<div class="input-group sm-6">
+									<input type="text" class="form-control"
+										placeholder="請輸入留言......" aria-label="Recipient's username"
+										aria-describedby="basic-addon2" maxlength="70" minlength="4">
+									<div class="input-group-append">
+										<button class="btn btn-primary" id="sendmessage">發布</button>
+										<div class="position-fixed bottom-0 end-0 p-3"
+											style="z-index: 11">
+											<div id="liveToast"
+												class="toast align-items-center text-white bg-primary border-0"
+												role="alert" aria-live="assertive" aria-atomic="true">
+												<div class="toast-body">留言發布成功!</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</details>
+						</div>
+					</div>
+				</div>
+			</div>
+			<footer class="py-4 bg-light mt-auto">
+				<div class="container-fluid px-4">
+					<div
+						class="d-flex align-items-center justify-content-between small">
+						<div class="text-muted">Copyright &copy; Your Website 2022</div>
+						<div>
+							<a href="#">Privacy Policy</a> &middot; <a href="#">Terms
+								&amp; Conditions</a>
+						</div>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</div>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+		crossorigin="anonymous"></script>
+	<script src="js/scripts.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
+		crossorigin="anonymous"></script>
+	<script src="assets/demo/chart-area-demo.js"></script>
+	<script src="assets/demo/chart-bar-demo.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"
+		crossorigin="anonymous"></script>
+	<script src="js/datatables-simple-demo.js"></script>
+	<script>
+		var toastTrigger = document.getElementById('sendmessage')
+		var toastLiveExample = document.getElementById('liveToast')
+		if (toastTrigger) {
+			toastTrigger.addEventListener('click', function() {
+				var toast = new bootstrap.Toast(toastLiveExample)
+				toast.show();
+				setTimeout("location.href='/postmodel'", 1500);
+			})
+		}
+	</script>
 </body>
 
 </html>

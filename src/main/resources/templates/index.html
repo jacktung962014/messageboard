@@ -78,10 +78,10 @@
                                     </tr>
                                 </tfoot>
                                 <tbody>
-                                    <tr th:each="messageboardTopic:${name}">
+                                    <tr th:each="messageboardTopic:${article}">
                                         <td><a th:href="'/postmodel?id=' + ${messageboardTopic.id}" th:text="${messageboardTopic.topic}"></a></td>
-                                        <td th:text="${messageboardTopic.userID}"></td>
-                                        <td th:text="${messageboardTopic.createTime}"></td>
+                                        <td th:text="${messageboardTopic.username}"></td>
+                                        <td th:text="${messageboardTopic.create_time}"></td>
                                     </tr>
                                 </tbody>
                             </table>

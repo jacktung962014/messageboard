@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.example.model.MessageboardModel;
 
 @Repository
-public interface SearchMessageboardDao extends JpaRepository<MessageboardModel ,Integer> {
+public interface SearchMessageboardDao extends JpaRepository<MessageboardModel, Integer> {
 }
