@@ -1,33 +1,24 @@
 package com.example.controller;
 
-import java.sql.Date;
 import java.util.List;
-import java.util.Optional;
 
-import javax.persistence.Id;
-
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.example.dao.CommentDao;
 import com.example.model.AccountModel;
 import com.example.model.MessageModel;
 import com.example.model.MessageboardModel;
-import com.example.model.Entity.ArticleList;
 import com.example.model.Entity.Comment;
 import com.example.service.AccountService;
 import com.example.service.MessageService;
 import com.example.service.SearchMessageboardService;
-
 @Controller
 public class SampleController {
 	@Autowired
@@ -64,17 +55,13 @@ public class SampleController {
 		 model.addAttribute("id", MessageboardId);
 		 model.addAttribute("accountservice", accountService.getAccountById(MessageboardId.getUserID()));
 		 model.addAttribute("comment", messageService.getComments(id));
-		 
-		 
-		 
-		 
 		    return "postmodel";
 	}
 	
 	// 跳轉至新增貼文頁
 	@GetMapping(value = "/postmessage")
 	public String postmessagePage() {
-		return "postmessage";
+		return "postmessage";//查getAttribute
 	}
 
 	// 跳轉至註冊頁
