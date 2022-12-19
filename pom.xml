@@ -59,12 +59,7 @@
 		</dependency>
 		<!-- For Thymeleaf connection End -->
 		
-		<!-- For Spring Security connection start -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
-		<!-- For Spring Security connection end -->
+
 		
 		<!-- For Lombok connection start -->
 		<dependency>

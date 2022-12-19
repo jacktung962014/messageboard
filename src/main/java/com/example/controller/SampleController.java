@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,6 +49,7 @@ public class SampleController {
 	}
 
 
+	// 跳轉至貼文頁
 	@GetMapping(value = "/postmodel")
 	public String postmodel(@RequestParam(value = "id", required = true) Integer id , Model model) {
 		MessageboardModel MessageboardId = searchMessageboardService.getMessageboardById(id);	
@@ -60,16 +61,33 @@ public class SampleController {
 	
 	// 跳轉至新增貼文頁
 	@GetMapping(value = "/postmessage")
-	public String postmessagePage() {
+	public String postmessagePage(Model model) {
+		
+		MessageboardModel messageboardModel = new MessageboardModel();
+		
+		
+				
 		return "postmessage";//查getAttribute
 	}
 
 	// 跳轉至註冊頁
 	@GetMapping(value = "/register")
-	public String registerPage() {
+	public String registerPage(Model model) {
+		model.addAttribute("accountmodel", new AccountModel());
 		return "register";
 	}
+	
+	@PostMapping(value = "/register")
+	public String adduser(AccountModel accountModel) {
+		accountService.addAccount(accountModel);
+		return "login";
+	}
+	
+	
+	
+	
 
+	// 以下為postman測試用
 	@PostMapping(value = "/add")
 	@ResponseBody
 	public String add(@RequestBody MessageModel messageModel) {
@@ -77,6 +95,7 @@ public class SampleController {
 		return messageModel.toString();
 	}
 
+	// 以下為postman測試用
 	@PostMapping(value = "/delete")
 	@ResponseBody
 	public String delete(Integer deleteById) {
@@ -86,6 +105,7 @@ public class SampleController {
 
 	}
 
+	// 以下為postman測試用
 	@PostMapping(value = "/addaccount")
 	@ResponseBody
 	public String addaccount(@RequestBody AccountModel accountModel) {
@@ -94,7 +114,7 @@ public class SampleController {
 
 	}
 	
-	
+	// 以下為postman測試用
 	@PostMapping(value = "/find")
 	@ResponseBody
 	public String find(Integer findById) {
@@ -104,6 +124,7 @@ public class SampleController {
 
 	}
 	
+
 	
 	
 
