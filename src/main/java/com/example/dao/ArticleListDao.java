@@ -16,5 +16,4 @@ public interface ArticleListDao extends JpaRepository<ArticleList, Integer> {
 			+ " INNER JOIN account a ON mb.user_id = a.id"
 			+ " ORDER BY mb.create_Time DESC")
 	List<ArticleList> getArticleList();
-
 }

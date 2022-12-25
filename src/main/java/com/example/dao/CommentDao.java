@@ -14,7 +14,7 @@ public interface CommentDao extends JpaRepository<Comment, Integer> {
 	@Query(nativeQuery = true, value = "SELECT m.id, m.board_id, a.username, m.member_message, m.create_time"
 			+ " FROM message m"
 			+ " INNER JOIN account a ON m.user_id = a.id"
-			+ " Where m.board_id = :name"
+			+ " Where m.board_id = :name"// :name是指下面的Integer id透過@Param("name")這個key傳入SQL語法
 			+ " ORDER BY m.create_time;")
-	List<Comment> findByID(@Param("name") Integer id);
+	List<Comment> findByID(@Param("name") Integer id);// @Param("name")是key，Integer id是傳入的value
 }

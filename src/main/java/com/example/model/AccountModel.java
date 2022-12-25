@@ -13,6 +13,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.CreatedDate;
@@ -34,19 +35,19 @@ public class AccountModel {
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // 設定該Column 生成方式。 GenerationType.IDENTITY:資料庫維護。
 	private Integer id;
 	
-	@Size(min = 4, max = 25, message = "使用者名稱不可少於4位或超過25位")
+	@Length(min = 1, max = 25, message ="使用者名稱不可少於1位或超過25位")
 	@NotEmpty(message = "使用者名稱不可為空")
-	@UniqueElements(message = "使用者名稱已被註冊")
+	//@UniqueElements(message = "使用者名稱已被註冊")
 	@Column(name = "username", unique = true)
 	private String username;
 	
-	@Size(min = 6, max = 30, message = "帳號不可少於6位或超過30位")
+	@Length(min = 4, max = 25, message ="帳號不可少於4位或超過25位")
 	@NotEmpty(message = "帳號不可為空")
-	@UniqueElements(message = "此帳號已被註冊")
+	//@UniqueElements(message = "此帳號已被註冊")
 	@Column(name = "account")
 	private String account;
 	
-	@Size(min = 8, max = 30, message = "密碼不可少於8位或超過30位")
+	@Length(min = 4, max = 25, message ="密碼不可少於4位或超過25位")
 	@NotEmpty(message = "密碼不可為空")
 	@Column(name = "password")
 	private String password;

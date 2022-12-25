@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,9 @@ import com.example.service.AccountService;
 import com.example.service.MessageService;
 import com.example.service.SearchMessageboardService;
 
+import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
+
+@Validated
 @Controller
 public class SampleController {
 	@Autowired
@@ -47,10 +51,10 @@ public class SampleController {
 		// <-- 文章列表 End -->
 		// <-- 顯示使用者名稱 Start -->
 		UserAccount userAccount = (UserAccount) session.getAttribute("getUserAccount");
-		String username = null;
+		String username = null;// 自Session中取出userAccount物件
 		// 如果username為空(未登入)，顯示為訪客
 		try {
-			username = userAccount.getUsername();// 查詢值，結果為null會丟出例外
+			username = userAccount.getUsername();// 查詢userAccount物件中的值:username，結果為null會丟出例外
 		} catch (Exception e) {
 			username = "訪客";// 丟出例外時將username設為訪客
 		}
@@ -78,7 +82,7 @@ public class SampleController {
 					.equals(checkpassword);
 			// if else:輸入的帳號密碼相符，導向回首頁，不符導向回登入頁
 			if (a.equals(b)) {
-				// 將使用者資訊放入userAccount物件以供使用
+				// 將使用者資訊(username、permission、userID)放入userAccount物件以供使用
 				String setUsernameIfCorrect = accountService.getIdentityByAccount(userAccount.getAccount())
 						.getUsername();
 				Integer setPermissionIfCorrect = accountService.getIdentityByAccount(userAccount.getAccount())
@@ -112,10 +116,10 @@ public class SampleController {
 
 		// <-- 顯示使用者名稱 Start -->
 		UserAccount userAccount = (UserAccount) session.getAttribute("getUserAccount");
-		String username = null;
+		String username = null;// 自Session中取出userAccount物件
 		// 如果username為空(未登入)，顯示為訪客
 		try {
-			username = userAccount.getUsername();// 查詢值，結果為null會丟出例外
+			username = userAccount.getUsername();// 查詢userAccount物件中的值:username，結果為null會丟出例外
 		} catch (Exception e) {
 			username = "訪客";// 丟出例外時將username設為訪客
 		}
@@ -124,7 +128,7 @@ public class SampleController {
 
 		messageModel.setBoardID(id);
 		model.addAttribute("messageModel", messageModel);
-		
+
 		// <-- 顯示貼文內容及留言 Start -->
 		MessageboardModel messageboardId = searchMessageboardService.getMessageboardById(id);
 		model.addAttribute("id", messageboardId);// 取出messageboard表的資料
@@ -137,19 +141,17 @@ public class SampleController {
 	// 在貼文頁中新增留言
 	@PostMapping(value = "/postmodel")
 	public String postComments(@ModelAttribute MessageModel messageModel, HttpSession session) {
-
 		// <-- 顯示使用者名稱+登入檢查 Start -->
 		UserAccount userAccount = (UserAccount) session.getAttribute("getUserAccount");
-		String username = null;
-		
+		String username = null;// 自Session中取出userAccount物件
 		try {
-			username = userAccount.getUsername();// 查詢值，結果為null會丟出例外
-			MessageModel addMessage = new MessageModel();// 如果username不為空(已登入)，新增留言至資料庫
-			Integer userId = userAccount.getUserID();
-			addMessage.setUserID(userId);
+			username = userAccount.getUsername();// 查詢userAccount物件中的值:username，結果為null會丟出例外
+			MessageModel addMessage = new MessageModel();// 如果username不為空(已登入)，新增實體存取資料，用於將留言存至資料庫
+			Integer userId = userAccount.getUserID();// 取得userAccount物件中的值:userID
+			addMessage.setUserID(userId);// 將值(userId、boardID、memberMessage)存至實體addMessage
 			addMessage.setBoardID(messageModel.getBoardID());
 			addMessage.setMemberMessage(messageModel.getMemberMessage());
-			messageService.saveMessage(addMessage);
+			messageService.saveMessage(addMessage);// 將實體存至資料庫
 			return "redirect:/";
 		} catch (Exception e) {
 			return "redirect:/login";// 丟出例外時(未登入)將重新導向至登入頁
@@ -205,9 +207,26 @@ public class SampleController {
 			}
 			return "redirect:/register";
 		}
-		accountService.addAccount(accountModel);
-		return "redirect:/";// 重新導向頁面，使用 redirect 關鍵字，搭配絕對路徑，這邊表示會回到根路徑。
+		try {// 檢查使用者名稱、帳號是否有重複
+			Integer checkUsername = accountService.checkExistsUsername(accountModel.getUsername());
+			Integer checkAccount = accountService.checkExistsAccount(accountModel.getAccount());
+			if (checkUsername == 1 || checkAccount == 1) {// 如果任一重複(此時SQL語法會回傳1)，重新導向會註冊頁(暫時)
+				return "redirect:/register";
+			} else {// 若兩者都沒有重複(此時SQL語法會回傳0)，則在資料庫中新增該帳號。
+				accountService.addAccount(accountModel);
+				return "redirect:/";// 重新導向頁面，使用 redirect 關鍵字，搭配絕對路徑，這邊表示會回到根路徑。
+			}
+		} catch (Exception e) {
+			return "redirect:/401";
+		}
 		// <-- 新增帳號 End -->
+	}
+
+	// 登出功能，清除Session
+	@GetMapping(value = "/logout")
+	public String logOut(HttpSession session) {
+		session.invalidate();// 清除Session
+		return "redirect:/";
 	}
 
 	// 測試用API，為postman測試用，非正式網頁用。
