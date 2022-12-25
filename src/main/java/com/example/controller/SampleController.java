@@ -122,6 +122,9 @@ public class SampleController {
 		model.addAttribute("user", username);
 		// <-- 顯示使用者名稱 End -->
 
+		messageModel.setBoardID(id);
+		model.addAttribute("messageModel", messageModel);
+		
 		// <-- 顯示貼文內容及留言 Start -->
 		MessageboardModel messageboardId = searchMessageboardService.getMessageboardById(id);
 		model.addAttribute("id", messageboardId);// 取出messageboard表的資料
@@ -133,21 +136,20 @@ public class SampleController {
 
 	// 在貼文頁中新增留言
 	@PostMapping(value = "/postmodel")
-	public String postComments(@RequestParam Map<String, String> requestParams, @ModelAttribute MessageModel messageModel, HttpSession session) {
+	public String postComments(@ModelAttribute MessageModel messageModel, HttpSession session) {
 
-		
-		
-		
-		String ids = requestParams.get("?id=");
-		System.out.println(ids);
-		
-		
 		// <-- 顯示使用者名稱+登入檢查 Start -->
 		UserAccount userAccount = (UserAccount) session.getAttribute("getUserAccount");
 		String username = null;
 		
 		try {
 			username = userAccount.getUsername();// 查詢值，結果為null會丟出例外
+			MessageModel addMessage = new MessageModel();// 如果username不為空(已登入)，新增留言至資料庫
+			Integer userId = userAccount.getUserID();
+			addMessage.setUserID(userId);
+			addMessage.setBoardID(messageModel.getBoardID());
+			addMessage.setMemberMessage(messageModel.getMemberMessage());
+			messageService.saveMessage(addMessage);
 			return "redirect:/";
 		} catch (Exception e) {
 			return "redirect:/login";// 丟出例外時(未登入)將重新導向至登入頁
