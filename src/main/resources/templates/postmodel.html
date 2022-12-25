@@ -23,16 +23,7 @@
 		<!-- Navbar Brand-->
 		<a class="navbar-brand ps-3" href="/">留言板首頁</a>
 		<!-- Navbar Search-->
-		<form
-			class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-			<div class="input-group">
-				<input class="form-control" type="text" placeholder="搜尋貼文"
-					aria-label="Search for..." aria-describedby="btnNavbarSearch" />
-				<button class="btn btn-primary" id="btnNavbarSearch" type="button">
-					<i class="fas fa-search"></i>
-				</button>
-			</div>
-		</form>
+		<div th:text="${user}" style="color: white;"></div>
 		<!-- Navbar-->
 		<ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
 			<li class="nav-item dropdown"><a
@@ -69,7 +60,7 @@
 							<p>
 							<h4 th:text="${id.topic}"></h4>
 							</p>
-							<div th:text="'作者 : ' + ${accountservice.username}"
+							<div th:text="'作者 : ' + ${userinfo.username}"
 								class="col-md-6" style="font-size: 16px; font-weight: bold;"></div>
 							<div th:text="'發布時間 : ' + ${id.createTime}" class="col-md-6"
 								style="font-size: 16px; font-weight: bold;"></div>
@@ -91,22 +82,34 @@
 									<div th:text="${usercomment.memberMessage}"
 										style="font-size: 20px;"></div>
 								</div>
-								<div class="input-group sm-6">
-									<input type="text" class="form-control"
-										placeholder="請輸入留言......" aria-label="Recipient's username"
-										aria-describedby="basic-addon2" maxlength="70" minlength="4">
-									<div class="input-group-append">
-										<button class="btn btn-primary" id="sendmessage">發布</button>
-										<div class="position-fixed bottom-0 end-0 p-3"
-											style="z-index: 11">
-											<div id="liveToast"
-												class="toast align-items-center text-white bg-primary border-0"
-												role="alert" aria-live="assertive" aria-atomic="true">
-												<div class="toast-body">留言發布成功!</div>
+
+								
+								
+								
+								
+								<form th:action="@{/postmodel}" th:object="${messageModel}" method="post">
+										<input th:field="*{memberMessage}" type="text" class="form-control"
+											placeholder="請輸入留言......" aria-label="Recipient's username"
+											aria-describedby="basic-addon2" maxlength="70" minlength="4">
+										<div class="input-group-append">
+											<input type="submit" class="btn btn-primary" id="sendmessage"/>
+											<div class="position-fixed bottom-0 end-0 p-3"
+												style="z-index: 11">
+												<div id="liveToast"
+													class="toast align-items-center text-white bg-primary border-0"
+													role="alert" aria-live="assertive" aria-atomic="true">
+													<div class="toast-body">留言發布成功!</div>
+												</div>
 											</div>
 										</div>
-									</div>
-								</div>
+									</form>
+								
+								
+									
+									
+									
+									
+
 							</details>
 						</div>
 					</div>
@@ -138,17 +141,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"
 		crossorigin="anonymous"></script>
 	<script src="js/datatables-simple-demo.js"></script>
-	<script>
-		var toastTrigger = document.getElementById('sendmessage')
-		var toastLiveExample = document.getElementById('liveToast')
-		if (toastTrigger) {
-			toastTrigger.addEventListener('click', function() {
-				var toast = new bootstrap.Toast(toastLiveExample)
-				toast.show();
-				setTimeout("location.href='/postmodel'", 1500);
-			})
-		}
-	</script>
+
 </body>
 
 </html>

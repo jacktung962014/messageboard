@@ -15,11 +15,13 @@ import com.example.model.Entity.Comment;
 public class MessageService {
 	@Autowired 
 	MessageDao messageDao;
+	//save方法
 	public MessageModel saveMessage(MessageModel saveMessage){
 		return messageDao.save(saveMessage);
 	}
 	
 	@Autowired
+	//findByID方法
 	CommentDao commentDao;
 	public List<Comment> getComments(Integer id){
 		return commentDao.findByID(id);

@@ -9,10 +9,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.sun.istack.NotNull;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,20 +31,31 @@ import lombok.Setter;
 public class AccountModel {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)//設定該Column 生成方式。 GenerationType.IDENTITY:資料庫維護。
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // 設定該Column 生成方式。 GenerationType.IDENTITY:資料庫維護。
 	private Integer id;
-	@Column(name = "username")
+	
+	@Size(min = 4, max = 25, message = "使用者名稱不可少於4位或超過25位")
+	@NotEmpty(message = "使用者名稱不可為空")
+	@UniqueElements(message = "使用者名稱已被註冊")
+	@Column(name = "username", unique = true)
 	private String username;
+	
+	@Size(min = 6, max = 30, message = "帳號不可少於6位或超過30位")
+	@NotEmpty(message = "帳號不可為空")
+	@UniqueElements(message = "此帳號已被註冊")
 	@Column(name = "account")
 	private String account;
+	
+	@Size(min = 8, max = 30, message = "密碼不可少於8位或超過30位")
+	@NotEmpty(message = "密碼不可為空")
 	@Column(name = "password")
 	private String password;
-	
-	@CreationTimestamp //設定為建立時間，當實體被INSERT 時會預設值，不可用@CreatedDate，因為格式不同(java.util.date)。
+
+	@CreationTimestamp // 設定為建立時間，當實體被INSERT 時會預設值，不可用@CreatedDate，因為格式不同(java.util.date)。
 	@Column(name = "create_time")
 	private Date createTime;
-	
+
 	@Column(name = "permission")
-	private Integer permission = 1;//欄位為notnull，需從物件上給定預設值避免報錯。
-	
+	private Integer permission = 1;// 欄位為notnull，需從物件上給定預設值避免報錯。
+
 }

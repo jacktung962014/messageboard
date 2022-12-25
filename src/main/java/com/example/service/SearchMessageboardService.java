@@ -14,22 +14,24 @@ import com.example.model.Entity.ArticleList;
 public class SearchMessageboardService {
 	@Autowired
 	SearchMessageboardDao searchMessageboardDao;
-
+	//findAll方法
 	public List<MessageboardModel> getMessageboard() {
-
 		return searchMessageboardDao.findAll();
-
 	}
+	
+	//findById方法
 	public MessageboardModel getMessageboardById(Integer id) {
-		
 		return searchMessageboardDao.findById(id).get();
 	}
 	
-	@Autowired ArticleListDao articleListDao;
-	
-	public List<ArticleList> getArticleList() {
-		
-		return articleListDao.getArticleList();
+	//save方法
+	public MessageboardModel saveMessageboard(MessageboardModel messageboardModel) {
+		return searchMessageboardDao.save(messageboardModel);
 	}
 	
+	@Autowired ArticleListDao articleListDao;
+	//取得ArticleList方法
+	public List<ArticleList> getArticleList() {
+		return articleListDao.getArticleList();
+	}
 }
