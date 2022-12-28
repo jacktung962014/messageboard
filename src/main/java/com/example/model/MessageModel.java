@@ -8,8 +8,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.validator.constraints.Length;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +32,8 @@ public class MessageModel {
 	@Column(name = "board_id")
 	private int boardID;
 	
+	@Length(min = 1, max = 100, message ="留言不可少於1個字或超過100個字")
+	@NotEmpty(message = "留言不可為空")
 	@Column(name = "member_message")
 	private String memberMessage;
 	

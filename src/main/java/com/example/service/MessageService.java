@@ -13,18 +13,35 @@ import com.example.model.Entity.Comment;
 
 @Service
 public class MessageService {
-	@Autowired 
+	@Autowired
 	MessageDao messageDao;
-	//save方法
-	public MessageModel saveMessage(MessageModel saveMessage){
+
+	// find方法
+	public MessageModel findMessage(Integer id) {
+		return messageDao.findById(id).get();
+	}
+
+	// save方法
+	public MessageModel saveMessage(MessageModel saveMessage) {
 		return messageDao.save(saveMessage);
 	}
-	
+
+	// delete方法
+	public void deleteMessage(Integer id) {
+		messageDao.deleteById(id);
+	}
+
+	// deleteBy方法
+	public void deleteMessageByBoardID(Integer id) {
+		messageDao.deleteByboardID(id);
+	}
+
 	@Autowired
-	//findByID方法
+	// findByID方法
 	CommentDao commentDao;
-	public List<Comment> getComments(Integer id){
+
+	public List<Comment> getComments(Integer id) {
 		return commentDao.findByID(id);
 	}
-		
+
 }

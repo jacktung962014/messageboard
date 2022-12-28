@@ -83,6 +83,13 @@
 			<artifactId>spring-session-core</artifactId>
 		</dependency>
 		<!-- For Spring-Session End -->
+		<!-- For Spring Security connection start -->
+		<!-- 無使用Spring Security，導入依賴只是為了使用其中的BCryptPasswordEncoder，用於加密 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<!-- For Spring Security connection end -->
 
 	</dependencies>
 

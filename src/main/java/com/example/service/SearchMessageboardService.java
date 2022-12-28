@@ -10,27 +10,36 @@ import com.example.dao.ArticleListDao;
 import com.example.dao.SearchMessageboardDao;
 import com.example.model.MessageboardModel;
 import com.example.model.Entity.ArticleList;
+
 @Service
 public class SearchMessageboardService {
 	@Autowired
 	SearchMessageboardDao searchMessageboardDao;
-	//findAll方法
+
+	// findAll方法
 	public List<MessageboardModel> getMessageboard() {
 		return searchMessageboardDao.findAll();
 	}
-	
-	//findById方法
+
+	// findById方法
 	public MessageboardModel getMessageboardById(Integer id) {
 		return searchMessageboardDao.findById(id).get();
 	}
-	
-	//save方法
+
+	// save方法
 	public MessageboardModel saveMessageboard(MessageboardModel messageboardModel) {
 		return searchMessageboardDao.save(messageboardModel);
 	}
-	
-	@Autowired ArticleListDao articleListDao;
-	//取得ArticleList方法
+
+	// delete方法
+	public void deleteMessageboardById(Integer id) {
+		searchMessageboardDao.deleteById(id);
+	}
+
+	@Autowired
+	ArticleListDao articleListDao;
+
+	// 取得ArticleList方法
 	public List<ArticleList> getArticleList() {
 		return articleListDao.getArticleList();
 	}

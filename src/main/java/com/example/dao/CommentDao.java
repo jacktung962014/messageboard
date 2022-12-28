@@ -15,6 +15,6 @@ public interface CommentDao extends JpaRepository<Comment, Integer> {
 			+ " FROM message m"
 			+ " INNER JOIN account a ON m.user_id = a.id"
 			+ " Where m.board_id = :name"// :name是指下面的Integer id透過@Param("name")這個key傳入SQL語法
-			+ " ORDER BY m.create_time;")
+			+ " ORDER BY m.id;")
 	List<Comment> findByID(@Param("name") Integer id);// @Param("name")是key，Integer id是傳入的value
 }

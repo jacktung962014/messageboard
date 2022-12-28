@@ -16,7 +16,7 @@ public interface AccountDao extends JpaRepository<AccountModel, Integer> {
 	// SELECT EXISTS這句是指查詢資料庫中是否存在我們指定要找的值。
 	@Query(nativeQuery = true, value = "SELECT EXISTS(SELECT account FROM account a WHERE a.account = :name)")
 	Integer checkIfAccountExists(@Param("name") String account);
-	
+	// 此方法同上，只是指定要找的值&欄位不同。
 	
 	AccountModel findByAccount(String account);
 

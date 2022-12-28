@@ -23,7 +23,8 @@
 		<!-- Navbar Brand-->
 		<a class="navbar-brand ps-3" href="/">留言板首頁</a>
 		<!-- Navbar Search-->
-		<div class="ms-auto me-0 me-md-3 my-2 my-md-0" th:text="${user}" style="color: white;"></div>
+		<div class="ms-auto me-0 me-md-3 my-2 my-md-0" th:text="${user}"
+			style="color: white;"></div>
 		<!-- Navbar-->
 		<ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
 			<li class="nav-item dropdown"><a
@@ -58,22 +59,27 @@
 					<h3 class="mt-4" id="index_topic">留言板</h3>
 					<div class="card mb-4">
 						<div class="card-header">
-							<i class="fas fa-table me-1"></i> 新增貼文
+							<i class="fas fa-table me-1"></i>修改貼文
 						</div>
-						<form th:action="@{/postmessage}" th:object="${messageboardModel}"
-							method="post">
+						<form th:action="@{/modifyMessageboard}"
+							th:object="${messageboardModel}" method="post">
 							<div class="card-body">
 								<textarea th:field="*{topic}" id="textarea_topic"
 									placeholder="請輸入貼文標題" rows="1" maxlength="70" minlength="4"
 									required></textarea>
 								<textarea th:field="*{memberText}" id="textarea_main"
 									placeholder="請輸入內文" rows="10" minlength="10" required></textarea>
-								<input type="submit" placeholder="發布貼文" />
+
+
+								<input th:field="*{id}" style="display: none" /> <input
+									th:field="*{userID}" style="display: none" /> <input
+									type="submit" placeholder="發布貼文" />
 							</div>
 						</form>
 					</div>
 				</div>
 			</div>
+
 			<footer class="py-4 bg-light mt-auto">
 				<div class="container-fluid px-4">
 					<div

@@ -133,13 +133,14 @@
 									<div th:text="${usercomment.memberMessage}"
 										style="font-size: 20px;"></div>
 								</div>
-								<form th:action="@{/postmodel}" th:object="${messageModel}"
+								<form th:action="@{/modifyMessage}" th:object="${messageModel}"
 									method="post">
 									<input th:field="*{memberMessage}" type="text"
 										class="form-control" placeholder="請輸入留言......"
 										aria-label="Recipient's username"
 										aria-describedby="basic-addon2" maxlength="100" minlength="4">
 									<input th:field="*{boardID}" style="display: none" />
+									<input th:field="*{id}" style="display: none" />
 									<div class="input-group-append">
 										<input type="submit" class="btn btn-primary" id="sendmessage" />
 										<div class="position-fixed bottom-0 end-0 p-3"
