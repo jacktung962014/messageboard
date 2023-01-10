@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.example.model.Entity.Comment;
+import com.example.model.Comment;
 
 @Repository
 public interface CommentDao extends JpaRepository<Comment, Integer> {

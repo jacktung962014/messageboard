@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>關於留言板</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
+	rel="stylesheet" />
+<link href="css/styles.css" rel="stylesheet" />
+<script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"
+	crossorigin="anonymous"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+
+<body class="sb-nav-fixed sb-sidenav-toggled">
+	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+		<!-- Navbar Brand-->
+		<a class="navbar-brand ps-3" href="/">留言板</a>
+		<!-- Navbar Search-->
+		<div class="ms-auto me-0 me-md-3 my-2 my-md-0" th:text="${user}"
+			style="color: white;"></div>
+		<!-- Navbar-->
+		<ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+			<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle" id="navbarDropdown" href="#"
+				role="button" data-bs-toggle="dropdown" aria-expanded="false"><i
+					class="fas fa-user fa-fw"></i></a>
+				<ul th:switch="${user}" class="dropdown-menu dropdown-menu-end"
+					aria-labelledby="navbarDropdown">
+					<li><a th:case="'訪客'" class="dropdown-item" href="/login">登入</a></li>
+					<li><a class="dropdown-item" href="/register">註冊</a></li>
+					<li><a class="dropdown-item" href="/password">忘記密碼</a></li>
+					<li><a class="dropdown-item" href="/postmessage">發布貼文</a></li>
+					<li><a class="dropdown-item" href="/about">關於留言板</a></li>
+					<li>
+						<hr class="dropdown-divider" />
+					</li>
+					<li><a th:case="*" class="dropdown-item" href="/logout">登出</a></li>
+				</ul></li>
+		</ul>
+	</nav>
+
+	<div id="layoutSidenav">
+		<div id="layoutSidenav_content">
+			<div class="container col-md-10">
+				<div id="layoutSidenav_nav">
+					<nav class="sb-sidenav accordion sb-sidenav-dark"
+						id="sidenavAccordion">
+						<div class="sb-sidenav-menu"></div>
+					</nav>
+				</div>
+				<div class="container-fluid px-4">
+					<h6 class="mt-4" id="index_topic" style="text-align: center">~~這裡有留言板的介紹及板規喔~~</h6>
+					<div class="card mb-4">
+						<div class="card-body">
+							<p>
+							<h4>關於留言板</h4>
+							</p>
+							<div class="col-md-6" style="font-size: 16px; font-weight: bold;">作者
+								: 童柏翔</div>
+							<div class="row">
+								<div class="col-md-6"
+									style="font-size: 16px; font-weight: bold;">發布時間 :
+									2022-12-28 16:40:32</div>
+							</div>
+							<hr size="4px">
+							<font size="1">
+							<h6 style="font-weight: bold;">作品介紹</h6>
+								<p>
+									留言板是一個簡單的純文字論壇，能讓使用者瀏覽貼文、註冊會員後發布貼文及留言，且作者能修改及刪除自己發布的留言或貼文。除一般使用者外，也有設置站長對網站進行管理，站長擁有刪除任何留言或貼文的權限。
+									<br>
+									我希望透過這項作品達到:熟悉後端與Spring框架的操作、練習實作CRUD、會員系統及Session，同時希望能在較短的時間內獨立完成，因此無論功能或前端的刻劃都相對簡單。
+								</p>
+							</font>
+							<hr size="4px">
+							<h6 style="font-weight: bold;">板規</h6>
+							<p>
+								<li style="font-size: 18px;">請注意基本禮貌，請勿人身攻擊、諷刺調侃、髒話謾罵、挑釁引戰。</li>
+								<li style="font-size: 18px;">使用者名稱不可有不雅、違反善良風俗的文字，若有違反者管理員及站長有權刪除帳號</li>
+								<li style="font-size: 18px;">本板主要使用繁體中文字體；若用語習慣不同，請以台澎金馬地區可瞭解為準。</li>
+								<li style="font-size: 18px;">請勿使用簡體字、注音文、火星文。</li>
+								<li style="font-size: 18px;">發佈貼文標題需滿4個字，貼文內文需滿10個字，請充實文章內容。</li>
+								<li style="font-size: 18px;">轉錄文章請附上來源網址，請勿發表八卦新聞或未經證實的消息。</li>
+								<li style="font-size: 18px;">請勿發表交易文、拍賣文、政治文、廣告文、轉錄文、重複資訊、洗板/洗留言等。</li>
+								<li style="font-size: 18px;">貼文及留言有違反上述規則，管理員及站長有權刪除。</li>
+							</p>
+							<hr size="4px">
+						</div>
+					</div>
+				</div>
+			</div>
+			<footer class="py-4 bg-light mt-auto">
+				<div class="container-fluid px-4">
+					<div>
+						<div class="text-muted"
+							style="font-size: x-small; text-align: center;">此網站為個人作品，僅供本人練習及學術交流，非營利使用。版權問題請聯繫：童柏翔
+							jacktung962014@gmail.com</div>
+					</div>
+			</footer>
+		</div>
+	</div>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+		crossorigin="anonymous"></script>
+	<script src="js/scripts.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
+		crossorigin="anonymous"></script>
+	<script src="assets/demo/chart-area-demo.js"></script>
+	<script src="assets/demo/chart-bar-demo.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"
+		crossorigin="anonymous"></script>
+	<script src="js/datatables-simple-demo.js"></script>
+
+</body>
+
+</html>

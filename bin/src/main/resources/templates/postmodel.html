@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title th:text="${id.topic}"></title>
+<link
+	href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
+	rel="stylesheet" />
+<link href="css/styles.css" rel="stylesheet" />
+<script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"
+	crossorigin="anonymous"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+
+<body class="sb-nav-fixed sb-sidenav-toggled">
+	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+		<!-- Navbar Brand-->
+		<a class="navbar-brand ps-3" href="/">留言板首頁</a>
+		<!-- Navbar Search-->
+		<div class="ms-auto me-0 me-md-3 my-2 my-md-0" th:text="${user}"
+			style="color: white;"></div>
+		<!-- Navbar-->
+		<ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+			<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle" id="navbarDropdown" href="#"
+				role="button" data-bs-toggle="dropdown" aria-expanded="false"><i
+					class="fas fa-user fa-fw"></i></a>
+				<ul class="dropdown-menu dropdown-menu-end"
+					aria-labelledby="navbarDropdown">
+					<li><a class="dropdown-item" href="/login">登入</a></li>
+					<li><a class="dropdown-item" href="/register">新增帳號</a></li>
+					<li><a class="dropdown-item" href="/password">忘記密碼</a></li>
+					<li><a class="dropdown-item" href="/postmessage">發布貼文</a></li>
+					<li>
+						<hr class="dropdown-divider" />
+					</li>
+					<li><a class="dropdown-item" href="/logout">登出</a></li>
+				</ul></li>
+		</ul>
+	</nav>
+
+	<div id="layoutSidenav">
+		<div id="layoutSidenav_content">
+			<div class="container col-md-10">
+				<div id="layoutSidenav_nav">
+					<nav class="sb-sidenav accordion sb-sidenav-dark"
+						id="sidenavAccordion">
+						<div class="sb-sidenav-menu"></div>
+					</nav>
+				</div>
+				<div class="container-fluid px-4">
+					<h3 class="mt-4" id="index_topic">留言板</h3>
+					<div class="card mb-4">
+						<div class="card-body">
+							<p>
+							<h4 th:text="${id.topic}"></h4>
+							</p>
+							<div th:text="'作者 : ' + ${userinfo.username}" class="col-md-6"
+								style="font-size: 16px; font-weight: bold;"></div>
+							<div class="row">
+								<div th:text="'發布時間 : ' + ${id.createTime}" class="col-md-6"
+									style="font-size: 16px; font-weight: bold;"></div>
+								<div class="col-md-6" style="text-align: right;">
+									<span th:switch="${boardCRUD}"> <span th:case="'1'"
+										style="text-align: right;"> <a
+											th:href="'/modifyMessageboard?id=' + ${messageModel.boardID}"><i
+												class="fa-solid fa-pen-nib fa-xs"></i></a>
+									</span>
+									</span> <span th:switch="${boardCRUD}"> <span th:case="'1'"
+										style="text-align: right;"> <a
+											th:href="'/deleteMessageboard?id=' + ${messageModel.boardID}"><i
+												class="fa-solid fa-xmark"></i></a>
+									</span> <span th:case="'2'" style="text-align: right;"> <a
+											th:href="'/deleteMessageboard?id=' + ${messageModel.boardID}"><i
+												class="fa-solid fa-xmark"></i></a>
+									</span>
+									</span>
+
+								</div>
+							</div>
+							<hr size="4px">
+							<font size="1">
+								<p th:text="${id.memberText}"></p>
+							</font>
+							<hr size="4px">
+							<details>
+								<summary style="font-size: 30px;">留言</summary>
+								<div th:each="usercomment,status:${comment}">
+									<div class="row">
+										<div class="col-6" style="text-align: left;">
+											<span th:text="${usercomment.username}"
+												style="font-size: 18px; color: #0390fc;"></span>
+										</div>
+										<div class="col-6"
+											style="text-align: right;">
+											
+											<span th:switch="${usercomment.username}">
+											
+											<span th:case="${user}" style="text-align: right;"> <a
+												th:href="'/modifyMessage?id=' + ${usercomment.id} + '&boardID=' + ${messageModel.boardID}"><i
+													class="fa-solid fa-pen-nib fa-xs"></i></a>
+											</span>
+											
+											</span>
+											
+											
+											
+											
+											<span th:if="${usercomment.username} eq ${user} or ${boardCRUD} eq '2'" style="text-align: right;"> <a
+												th:href="'/deleteMessage?id=' + ${usercomment.id} + '&boardID=' + ${messageModel.boardID}"><i
+													class="fa-solid fa-xmark"></i></a>
+											</span>
+											
+											
+											
+											
+											 
+											
+											
+											
+											<span
+												th:text="${status.count} + 'F ' +${usercomment.createTime}"
+												style="font-size: 10px;"> </span>
+										</div>
+									</div>
+
+									<div th:text="${usercomment.memberMessage}"
+										style="font-size: 20px;"></div>
+								</div>
+								<form th:action="@{/postmodel}" th:object="${messageModel}"
+									method="post">
+									<input th:field="*{memberMessage}" type="text"
+										class="form-control" placeholder="請輸入留言......"
+										aria-label="Recipient's username"
+										aria-describedby="basic-addon2" maxlength="100" minlength="4">
+									<input th:field="*{boardID}" style="display: none" />
+									<div class="input-group-append">
+										<input type="submit" class="btn btn-primary" id="sendmessage" />
+										<div class="position-fixed bottom-0 end-0 p-3"
+											style="z-index: 11">
+											<div id="liveToast"
+												class="toast align-items-center text-white bg-primary border-0"
+												role="alert" aria-live="assertive" aria-atomic="true">
+												<div class="toast-body">留言發布成功!</div>
+											</div>
+										</div>
+									</div>
+								</form>
+							</details>
+						</div>
+					</div>
+				</div>
+			</div>
+			<footer class="py-4 bg-light mt-auto">
+				<div class="container-fluid px-4">
+					<div
+						class="d-flex align-items-center justify-content-between small">
+						<div class="text-muted">Copyright &copy; Your Website 2022</div>
+						<div>
+							<a href="#">Privacy Policy</a> &middot; <a href="#">Terms
+								&amp; Conditions</a>
+						</div>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</div>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+		crossorigin="anonymous"></script>
+	<script src="js/scripts.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
+		crossorigin="anonymous"></script>
+	<script src="assets/demo/chart-area-demo.js"></script>
+	<script src="assets/demo/chart-bar-demo.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"
+		crossorigin="anonymous"></script>
+	<script src="js/datatables-simple-demo.js"></script>
+
+</body>
+
+</html>

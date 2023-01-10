@@ -21,7 +21,7 @@
 <body class="sb-nav-fixed sb-sidenav-toggled">
 	<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
 		<!-- Navbar Brand-->
-		<a class="navbar-brand ps-3" href="/">留言板首頁</a>
+		<a class="navbar-brand ps-3" href="/">留言板</a>
 		<!-- Navbar Search-->
 		<div class="ms-auto me-0 me-md-3 my-2 my-md-0" th:text="${user}"
 			style="color: white;"></div>
@@ -31,16 +31,17 @@
 				class="nav-link dropdown-toggle" id="navbarDropdown" href="#"
 				role="button" data-bs-toggle="dropdown" aria-expanded="false"><i
 					class="fas fa-user fa-fw"></i></a>
-				<ul class="dropdown-menu dropdown-menu-end"
+				<ul th:switch="${user}" class="dropdown-menu dropdown-menu-end"
 					aria-labelledby="navbarDropdown">
-					<li><a class="dropdown-item" href="/login">登入</a></li>
-					<li><a class="dropdown-item" href="/register">新增帳號</a></li>
+					<li><a th:case="'訪客'" class="dropdown-item" href="/login">登入</a></li>
+					<li><a class="dropdown-item" href="/register">註冊</a></li>
 					<li><a class="dropdown-item" href="/password">忘記密碼</a></li>
 					<li><a class="dropdown-item" href="/postmessage">發布貼文</a></li>
+					<li><a class="dropdown-item" href="/about">關於留言板</a></li>
 					<li>
 						<hr class="dropdown-divider" />
 					</li>
-					<li><a class="dropdown-item" href="/logout">登出</a></li>
+					<li><a th:case="*" class="dropdown-item" href="/logout">登出</a></li>
 				</ul></li>
 		</ul>
 	</nav>
@@ -55,7 +56,7 @@
 					</nav>
 				</div>
 				<div class="container-fluid px-4">
-					<h3 class="mt-4" id="index_topic">留言板</h3>
+					<h6 class="mt-4" id="index_topic" style="text-align: center">~~修改留言時請務必遵守版規，站長及管理員會不定期審核貼文及留言喔~~</h6>
 					<div class="card mb-4">
 						<div class="card-body">
 							<p>
@@ -97,34 +98,20 @@
 											<span th:text="${usercomment.username}"
 												style="font-size: 18px; color: #0390fc;"></span>
 										</div>
-										<div class="col-6"
-											style="text-align: right;">
-											
-											<span th:switch="${usercomment.username}">
-											
-											<span th:case="${user}" style="text-align: right;"> <a
-												th:href="'/modifyMessage?id=' + ${usercomment.id} + '&boardID=' + ${messageModel.boardID}"><i
-													class="fa-solid fa-pen-nib fa-xs"></i></a>
+										<div class="col-6" style="text-align: right;">
+
+											<span th:switch="${usercomment.username}"> <span
+												th:case="${user}" style="text-align: right;"> <a
+													th:href="'/modifyMessage?id=' + ${usercomment.id} + '&boardID=' + ${messageModel.boardID}"><i
+														class="fa-solid fa-pen-nib fa-xs"></i></a>
 											</span>
-											
-											</span>
-											
-											
-											
-											
-											<span th:if="${usercomment.username} eq ${user} or ${boardCRUD} eq '2'" style="text-align: right;"> <a
+
+											</span> <span
+												th:if="${usercomment.username} eq ${user} or ${boardCRUD} eq '2'"
+												style="text-align: right;"> <a
 												th:href="'/deleteMessage?id=' + ${usercomment.id} + '&boardID=' + ${messageModel.boardID}"><i
 													class="fa-solid fa-xmark"></i></a>
-											</span>
-											
-											
-											
-											
-											 
-											
-											
-											
-											<span
+											</span> <span
 												th:text="${status.count} + 'F ' +${usercomment.createTime}"
 												style="font-size: 10px;"> </span>
 										</div>
@@ -135,20 +122,20 @@
 								</div>
 								<form th:action="@{/modifyMessage}" th:object="${messageModel}"
 									method="post">
-									<input th:field="*{memberMessage}" type="text"
-										class="form-control" placeholder="請輸入留言......"
-										aria-label="Recipient's username"
-										aria-describedby="basic-addon2" maxlength="100" minlength="4">
-									<input th:field="*{boardID}" style="display: none" />
-									<input th:field="*{id}" style="display: none" />
-									<div class="input-group-append">
-										<input type="submit" class="btn btn-primary" id="sendmessage" />
-										<div class="position-fixed bottom-0 end-0 p-3"
-											style="z-index: 11">
-											<div id="liveToast"
-												class="toast align-items-center text-white bg-primary border-0"
-												role="alert" aria-live="assertive" aria-atomic="true">
-												<div class="toast-body">留言發布成功!</div>
+									<div class="input-group mb-3">
+										<input th:field="*{memberMessage}" type="text"
+											class="form-control" placeholder="請輸入留言......"
+											aria-label="Recipient's username"
+											aria-describedby="basic-addon2" maxlength="100" minlength="4"> <input th:field="*{boardID}" style="display: none" /> <input th:field="*{id}" style="display: none" />
+										<div class="input-group-append">
+											<input type="submit" class="btn btn-primary" id="sendmessage" />
+											<div class="position-fixed bottom-0 end-0 p-3"
+												style="z-index: 11">
+												<div id="liveToast"
+													class="toast align-items-center text-white bg-primary border-0"
+													role="alert" aria-live="assertive" aria-atomic="true">
+													<div class="toast-body">留言發布成功!</div>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -160,13 +147,10 @@
 			</div>
 			<footer class="py-4 bg-light mt-auto">
 				<div class="container-fluid px-4">
-					<div
-						class="d-flex align-items-center justify-content-between small">
-						<div class="text-muted">Copyright &copy; Your Website 2022</div>
-						<div>
-							<a href="#">Privacy Policy</a> &middot; <a href="#">Terms
-								&amp; Conditions</a>
-						</div>
+					<div>
+						<div class="text-muted"
+							style="font-size: x-small; text-align: center;">此網站為個人作品，僅供本人練習及學術交流，非營利使用。版權問題請聯繫：童柏翔
+							jacktung962014@gmail.com</div>
 					</div>
 				</div>
 			</footer>

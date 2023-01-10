@@ -1,15 +1,12 @@
 package com.example.controller;
 
 import java.util.Date;
-import java.util.List;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,10 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.example.model.AccountModel;
-import com.example.model.MessageModel;
-import com.example.model.MessageboardModel;
-import com.example.model.Entity.UserAccount;
+import com.example.model.UserAccount;
+import com.example.model.Entity.AccountModel;
+import com.example.model.Entity.MessageModel;
+import com.example.model.Entity.MessageboardModel;
 import com.example.service.AccountService;
 import com.example.service.MessageService;
 import com.example.service.SearchMessageboardService;
@@ -273,26 +270,44 @@ public class SampleController {
 			// 新增與更新操作都是使用save() 方法進行，JPA 會透過主鍵去查詢是否存在，不存在就INSERT，存在就是UPDATE，其中，JPA
 			// 只能判斷INSERT 或是UPDATE，並不能判斷出是否更新部分欄位，所以沒有被賦值的欄位都會被覆蓋為NULL，可能導致報錯。
 			return "redirect:/";
-		} catch (Exception e) {// 報錯時自動導向到500
-			return "redirect:/500";
+		} catch (Exception e) {// 報錯時自動導向到401
+			return "redirect:/401";
 		}
 
 	}
 
 	// 刪除貼文功能
 	@GetMapping(value = "/deleteMessageboard")
-	public String deleteMessageboard(@RequestParam(value = "id") Integer id,
-			@ModelAttribute MessageModel messageModel) {
-		searchMessageboardService.deleteMessageboardById(id);
-		messageService.deleteMessageByBoardID(id);// 刪除貼文時一併刪除該貼文底下的留言
-		return "redirect:/";
+	public String deleteMessageboard(@RequestParam(value = "id") Integer id, @ModelAttribute MessageModel messageModel,
+			HttpSession session) {
+		UserAccount userAccount = (UserAccount) session.getAttribute("getUserAccount");
+		Integer sessionUserId;// 自Session中取出userAccount物件(Session中取出的原物件為Object，將其強制轉型成物件UserAccount)
+		Integer boardUserId;
+		Integer sessionPermission;
+		// 如果sessionUserId為空(未登入)，不允許刪除留言
+		try {
+			boardUserId = searchMessageboardService.getMessageboardById(id).getUserID();// 查詢資料庫取得要刪除貼文的userId
+			sessionUserId = userAccount.getUserID();// 查詢userAccount物件中的值:userID，結果為null會丟出例外
+			sessionPermission = userAccount.getPermission();// 查詢userAccount物件中的值:Permission，結果為null會丟出例外
+			if (boardUserId.equals(sessionUserId) || sessionPermission.equals(2) || sessionPermission.equals(3)) {
+				// 如果Session中的userId與userId一致(是貼文作者)或Session中的Permission是2或3(是管理員) // 刪除貼文
+				searchMessageboardService.deleteMessageboardById(id);// 允許刪除貼文
+				messageService.deleteMessageByBoardID(id);// 刪除貼文時一併刪除該貼文底下的留言
+			} else {
+				Integer a = 1 / 0;// 否則會丟出例外跳轉至500頁
+				// Thymeleaf回傳的/deleteMessage url會帶兩個參數:id與boardID，網址參數是由成對的鍵和值所組成，
+				// 以等號 (=) 分隔，網址中的第一個參數固定放在問號後，兩個參數中間用"&"連接，id用於刪除留言，boardID用於刷新原本的貼文頁面
+			}
+			return "redirect:/";
+		} catch (Exception e) {
+			return "redirect:/500";
+		}
 	}
 
 	// 跳轉至修改留言頁面
 	@GetMapping(value = "/modifyMessage")
 	public String toModifyMessage(@RequestParam(value = "id") Integer id,
-			@RequestParam(value = "boardID") Integer boardID, Model model,
-			HttpSession session) {// 與跳轉至貼文頁不同，此處的id是指留言的id，boardID是指貼文的id
+			@RequestParam(value = "boardID") Integer boardID, Model model, HttpSession session) {// 與跳轉至貼文頁不同，此處的id是指留言的id，boardID是指貼文的id
 		// <-- 跳轉至貼文頁照搬過來 Start -->
 		// <-- 顯示使用者名稱 Start -->
 		UserAccount userAccount = (UserAccount) session.getAttribute("getUserAccount");
@@ -335,7 +350,8 @@ public class SampleController {
 
 	// 修改留言功能
 	@PostMapping(value = "/modifyMessage")
-	public String modifyMessage(@RequestParam(value = "id") Integer id, @ModelAttribute MessageModel messageModel, HttpSession session) {
+	public String modifyMessage(@RequestParam(value = "id") Integer id, @ModelAttribute MessageModel messageModel,
+			HttpSession session) {
 		// <-- 顯示使用者名稱+登入檢查 Start -->
 		UserAccount userAccount = (UserAccount) session.getAttribute("getUserAccount");
 		String username = null;// 自Session中取出userAccount物件(Session中取出的原物件為Object，將其強制轉型成物件UserAccount)
@@ -361,10 +377,35 @@ public class SampleController {
 	// 刪除留言功能
 	@GetMapping(value = "/deleteMessage")
 	public String deleteMessage(@RequestParam(value = "id") Integer id,
-			@RequestParam(value = "boardID") Integer boardID, @ModelAttribute MessageModel messageModel) {
-		messageService.deleteMessage(id);// Thymeleaf回傳的/deleteMessage url會帶兩個參數:id與boardID，網址參數是由成對的鍵和值所組成，
-		// 以等號 (=) 分隔，網址中的第一個參數固定放在問號後，兩個參數中間用"&"連接，id用於刪除留言，boardID用於刷新原本的貼文頁面
-		return "redirect:/postmodel?id=" + boardID;
+			@RequestParam(value = "boardID") Integer boardID, @ModelAttribute MessageModel messageModel,
+			HttpSession session) {
+		UserAccount userAccount = (UserAccount) session.getAttribute("getUserAccount");
+		Integer sessionUserId;// 自Session中取出userAccount物件(Session中取出的原物件為Object，將其強制轉型成物件UserAccount)
+		Integer messageUserId;
+		Integer sessionPermission;
+		// 如果sessionUserId為空(未登入)，不允許刪除留言
+		try {
+			messageUserId = messageService.findMessage(id).getUserID();// 查詢資料庫取得要刪除貼文的userId
+			sessionUserId = userAccount.getUserID();// 查詢userAccount物件中的值:userID，結果為null會丟出例外
+			sessionPermission = userAccount.getPermission();// 查詢userAccount物件中的值:Permission，結果為null會丟出例外
+			if (messageUserId.equals(sessionUserId) || sessionPermission.equals(2) || sessionPermission.equals(3)) {
+				// 如果Session中的userId與userId一致(是留言作者)或Session中的Permission是2或3(是管理員) // 刪除留言
+				messageService.deleteMessage(id);// 允許刪除留言
+			} else {
+				Integer a = 1 / 0;// 否則會丟出例外跳轉至500頁
+				// Thymeleaf回傳的/deleteMessage url會帶兩個參數:id與boardID，網址參數是由成對的鍵和值所組成，
+				// 以等號 (=) 分隔，網址中的第一個參數固定放在問號後，兩個參數中間用"&"連接，id用於刪除留言，boardID用於刷新原本的貼文頁面
+			}
+			return "redirect:/postmodel?id=" + boardID;
+		} catch (Exception e) {
+			return "redirect:/500";
+		}
+	}
+
+	// 跳轉至關於留言板
+	@GetMapping(value = "/about")
+	public String ToAbout() {
+		return "about";
 	}
 
 	// 跳轉至Status = 401頁面

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.dao.AccountDao;
-import com.example.model.AccountModel;
+import com.example.model.Entity.AccountModel;
 
 @Service
 public class AccountService {

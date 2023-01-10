@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.example.model.AccountModel;
+import com.example.model.Entity.AccountModel;
 
 @Repository
 public interface AccountDao extends JpaRepository<AccountModel, Integer> {

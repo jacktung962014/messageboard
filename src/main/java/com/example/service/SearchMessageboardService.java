@@ -1,15 +1,14 @@
 package com.example.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.dao.ArticleListDao;
 import com.example.dao.SearchMessageboardDao;
-import com.example.model.MessageboardModel;
-import com.example.model.Entity.ArticleList;
+import com.example.model.ArticleList;
+import com.example.model.Entity.MessageboardModel;
 
 @Service
 public class SearchMessageboardService {
